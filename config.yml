@@ -1,0 +1,42 @@
+data:
+  dataset_dir: "data/dataset.csv"
+  batchsize: 64   # previous was 128, 128 is best if we want to have less time
+
+model:
+  name: 'virus_classification'
+  checkpoint_dir: '../best_models/virus_classification.ckpt'
+  vocab_size: 10  # Number of unique features
+  embeds_size: 256  # Example embedding size
+  block_size: 100  # Example block size
+  num_classes: 4  # Number of protein classes
+  drop_prob: 0.1  # Example dropout probability
+
+train:
+  device: [0]
+  accelerator: 'gpu'
+  rank: 'cuda'
+  num_workers: 2
+  precision: "32-true"
+  True_False: True
+  max_epochs: 100
+  milestones: [25, 50, 75, 100, 125, 150] # mile stones are the epochs at which the model is saved 
+  base_lr: 0.001
+  scheduler_gamma: 0.5
+  ic_loss_weight: 0.9
+  f_loss_weight: 0.8
+  xy_loss_weight: 0.8
+  data_loss_weight: 0.89
+  profiler: 'advanced'  # "advanced", 'simple'
+  save_dir: 'logs/checkpoints/saved_models/train/'
+  save_name: 'kawahara_dl_model.pt'
+  ckpt: 'logs/checkpoints/kawahara.pt'
+  ckpt_freq: 25
+
+log:
+  project: 'kawahara'
+  group: 'kawaharaGroup'
+
+test:
+  batchsize: 1
+  ckpt: 'logs/checkpoints/saved_models/test/kawahara_dl_model.pt'
+
